@@ -1,0 +1,3 @@
+[submodule "love-letter"]
+	path = love-letter
+	url = https://github.com/user01/love-letter.git
