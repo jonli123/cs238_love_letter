@@ -51,7 +51,7 @@ class Player():
         current_hand=self.my_hand
         # might want to make a method to return all players instead of direcly accessing it
         all_players=players
-        another_player=list(set(all_players) - set(self.player))
+        another_player=list(set(all_players) - set([self.player]))
         # find possible cards to guess given the known state
         '''
         stateMap looks like
