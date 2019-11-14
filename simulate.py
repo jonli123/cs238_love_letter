@@ -12,3 +12,4 @@ players = [player0,player1]
 
 example_game = Game(deck,players)
 result = example_game.simulate()
+print('Winner: ',result)

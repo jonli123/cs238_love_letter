@@ -26,31 +26,44 @@ class Player():
         return [self.my_hand, self.new_card]
 
     def draw(self,card):
+        #print('draw: ',card)
         if self.new_card != Card.noCard:
             raise RuntimeError("already holding two cards {} and {}".format(self.my_hand, self.new_card))
-        self.new_card = card
+        if self.my_hand == Card.noCard:
+            self.my_hand = card
+        else:
+            self.new_card = card
+        #print('draw: ',self.get_hand())
 
-    def discard(self):#TODO: Revamp
-        self.discards.append(self.my_hand)
-        return self.my_hand
+    def discard(self,card=None):
+        if card == None:
+            self.discards.append(self.my_hand)
+            self.my_hand = Card.noCard
+            self.new_card = Card.noCard
+            return
+
+        if card == self.my_hand:
+            self.my_hand = self.new_card
+            self.new_card = Card.noCard
+        elif card == self.new_card:
+            self.new_card = Card.noCard
+        else:
+            raise RuntimeError("discard error, cards {} and {} dont match {}".format(self.my_hand, self.new_card, card))
+        self.discards.append(card)
 
     def take_turn(self,game_state,players):
         self.protected = False
         A = self.possible_actions(game_state,players)
         idx = np.random.choice(len(A)) #tuple of (card, target, guess)
         a = A[idx]
-        #a = self.heuristic(A)
-        if a[0] == self.my_hand:
-            self.my_hand = self.new_card
-        self.new_card = None
-        self.discards.append(a[0])
-        print(a)
+        self.discard(a.card)
         return a
 
     def possible_actions(self,game_state,players):
         # Game perform card drawing such that self.my_hand now has 2 cards
         all_actions=[]
         current_hand=self.get_hand()
+        print("current_hand ",current_hand)
         # might want to make a method to return all players instead of direcly accessing it
         opponents=list(set(players) - set([players[self.player]]))
         # find possible cards to guess given the known state

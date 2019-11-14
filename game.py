@@ -22,7 +22,6 @@ class Game():
         if action.card == Card.guard:
             #guess card
             if self._players[action.player_target].my_hand == action.guess and not self._players[action.player_target].protected:
-                self._players[action.player_target].discard()
                 self._winner = player.player
                 self._game_active = False
 
@@ -49,9 +48,9 @@ class Game():
         elif action.card == Card.prince:
             #Force discard
             if not self._players[action.player_target].protected:
-                action = self._players[action.player_target].discard()
-                self._players[action.player_target].draw(deck[0])
-                deck = deck[1:]
+                self._players[action.player_target].discard()
+                self._players[action.player_target].draw(self._deck[0])
+                self._deck = self._deck[1:]
         elif action.card == Card.king:
             #Trade hands
             if not self._players[action.player_target].protected:
@@ -76,7 +75,7 @@ class Game():
         return stateMap
 
     def do_turn(self):
-        print("turn ",self._turn_index)
+        #print("turn ",self._turn_index)
         player = self._players[self._turn_index % 2]
         player.protected = False
         player.draw(self._deck[0])
@@ -87,14 +86,13 @@ class Game():
         self.do_action(player,action)
         self._turn_index += 1
 
-
     def simulate(self):
         while self._game_active:
             self.do_turn()
             self._game_active = len(self._deck) > 1
-        if self.winner == -1:
+        if self._winner == -1:
             if self._players[0].my_hand > self._players[1].my_hand:
-                self.winner = 0
+                self._winner = 0
             elif self._players[0].my_hand < self._players[1].my_hand:
-                self.winner = 1
+                self._winner = 1
         return self._winner
