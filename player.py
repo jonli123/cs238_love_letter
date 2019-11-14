@@ -29,9 +29,10 @@ class player():
         return self.my_hand
 
     def take_turn(self):
-        self.orotected = False
+        self.protected = False
         A = self.possible_actions()
         a = np.sample(A) #tuple of (card, target, guess)
+        #a = self.heuristic(A)
         if a[0] == self.my_hand:
             self.my_hand = self.new_card
         self.new_card = None
@@ -41,6 +42,9 @@ class player():
     def possible_actions(self):
         pass
 
+    def heuristic(self, A):
+        #Eventually we can implement the heuristic here
+        return A[0]
 
 
 
