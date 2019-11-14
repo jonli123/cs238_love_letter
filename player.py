@@ -2,7 +2,7 @@
 from card import Card # map of total count
 from collections import namedtuple
 import numpy as np
-
+import random
 
 PlayerAction = namedtuple('PlayerAction', 'card player_target guess')
 
@@ -54,8 +54,10 @@ class Player():
     def take_turn(self,game_state,players):
         self.protected = False
         A = self.possible_actions(game_state,players)
-        idx = np.random.choice(len(A)) #tuple of (card, target, guess)
-        a = A[idx]
+        a = random.choice(A) #tuple of (card, target, guess)
+        #print(idx)
+        #a = A[idx]
+        print(a)
         self.discard(a.card)
         return a
 
