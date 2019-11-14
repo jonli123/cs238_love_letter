@@ -53,6 +53,6 @@ class Card():
             card_id = card_number + 1
             deck = deck + [card_id] * card_count
         deck_np = np.array(deck)
-        np.random.seed(seed=seed)
+        #np.random.seed(seed=seed)
         np.random.shuffle(deck_np)
         return deck_np
