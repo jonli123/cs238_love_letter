@@ -1,10 +1,8 @@
-<<<<<<< HEAD
 PlayerAction = namedtuple('PlayerAction', 'discard player_target guess revealed_card')
 # have to import Card object somehow
 from Card import counts # map of total count
-=======
+
 import numpy as np
->>>>>>> 9239c62cbd3088d3c02e13277af9d802350be12b
 
 class player():
     #player is a number?
@@ -12,7 +10,7 @@ class player():
         #self.my_discards = []
         #self.opponent_discards = []
         #self.pool_discards = []
-        self.discards = [] 
+        self.discards = []
         self.player = player
         self.other_hand = 0 #or it can be a number, which is the other persons hand
         self.my_hand = starting_hand
@@ -27,7 +25,7 @@ class player():
 
     def draw(card):
         if(self.new_card != None):
-            return "already holding two cards {} and {}".format(self.my_hand, self.new_card) 
+            return "already holding two cards {} and {}".format(self.my_hand, self.new_card)
         self.new_card = card
 
     def discard():
@@ -45,37 +43,36 @@ class player():
         self.discards.append(a[0])
         return a
 
-    
-    
+
+
     def possible_actions(self):
-<<<<<<< HEAD
         # Game perform card drawing such that self.my_hand now has 2 cards
         all_actions=[]
-        current_hand=self.my_hand        
+        current_hand=self.my_hand
         game=self.game
         # might want to make a method to return all players instead of direcly accessing it
-        all_players=game._players 
+        all_players=game._players
         another_player=list(set(all_players) - set(self.player))
         # find possible cards to guess given the known state
         '''
-        stateMap looks like 
+        stateMap looks like
         {allSeenCards:{guard:1,...,princess:0}, canTarget:True ,knowledge: {p0:king, p1:priest}}
         '''
         stateMap=game.getGameState()
-        allSeenCards=stateMap['stateMap']     
+        allSeenCards=stateMap['stateMap']
         canTarget=stateMap['canTarget']
         knowledge=stateMap['knowledge']
-        
+
         # special scenario when need to play countess
-        pool={self.player.get_hand(),another_player.get_hand()}  
+        pool={self.player.get_hand(),another_player.get_hand()}
         if Card.countess in pool:
             if (Card.king in pool) or (Card.prince in pool):
                 all_actions=all_actions.append(PlayerAction(Card.countess,Card.noCard,Card.noCard,Card.noCard))
-            else:               
-                
+            else:
+
                 current_card=current_hand[0]
                 # play guard
-                if current_card == Card.guard:   
+                if current_card == Card.guard:
                     if not another_player.pretected:
                         # if know what the other peroson has then call and the game is over
                         if knowledge[self.player.get_hand()] != Card.noCard:
@@ -91,7 +88,7 @@ class player():
                         # discard with no effect
                         all_actions=all_actions.append(PlayerAction(Card.guard,None,Card.noCard,Card.noCard))
                 # play priest
-                elif current_card == Card.priest:  
+                elif current_card == Card.priest:
                     if not another_player.pretected:
                         all_actions=all_actions.append(PlayerAction(Card.priest,another_player,Card.noCard,another_player.get_hand()))
                         # update knowledge in Game class
@@ -106,47 +103,31 @@ class player():
                     else:
                         all_actions=all_actions.append(PlayerAction(Card.baron,None,Card.noCard,Card.noCard))
                 # play handmaid
-                elif current_card == Card.handmaid:  
+                elif current_card == Card.handmaid:
                     all_actions=all_actions.append(PlayerAction(Card.handmaid,self.player,Card.noCard,Card.noCard))
                 # play prince
-                elif current_card == Card.prince:  
+                elif current_card == Card.prince:
                     # can always target yourself
                     all_actions=all_actions.append(PlayerAction(Card.baron,self.player,Card.noCard,Card.noCard))
                     if not another_player.pretected:
                         all_actions=all_actions.append(PlayerAction(Card.baron,another_player,Card.noCard,Card.noCard))
                 # play king
-                elif current_card == Card.king:  
+                elif current_card == Card.king:
                     if not another_player.pretected:
                         all_actions=all_actions.append(PlayerAction(Card.king,another_player,Card.noCard,Card.noCard))
                     else:
                         # discard with no effect
                         all_actions=all_actions.append(PlayerAction(Card.king,None,Card.noCard,Card.noCard))
                 # play countess
-                elif current_card == Card.countess:  
+                elif current_card == Card.countess:
                     all_actions=all_actions.append(PlayerAction(Card.countess,None,Card.noCard,Card.noCard))
                 # play princess
-                elif current_card == Card.countess:  
+                elif current_card == Card.countess:
                     all_actions=all_actions.append(PlayerAction(Card.princess,None,Card.noCard,Card.noCard))
-            
-        
-                         
-                         
-                         
-        
-        
-        
-=======
+
+
         pass
 
     def heuristic(self, A):
         #Eventually we can implement the heuristic here
         return A[0]
->>>>>>> 9239c62cbd3088d3c02e13277af9d802350be12b
-
-
-
-
-
-
-
-
