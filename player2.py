@@ -1,54 +1,33 @@
-<<<<<<< HEAD
 PlayerAction = namedtuple('PlayerAction', 'discard player_target guess revealed_card')
 # have to import Card object somehow
 from Card import counts # map of total count
-=======
-import numpy as np
->>>>>>> 9239c62cbd3088d3c02e13277af9d802350be12b
 
 class player():
     #player is a number?
-    def __init__(self, player, game, starting_hand):
+    def __init__(self, player, game):
         #self.my_discards = []
         #self.opponent_discards = []
         #self.pool_discards = []
         self.discards = [] 
-        self.player = player
         self.other_hand = 0 #or it can be a number, which is the other persons hand
-        self.my_hand = starting_hand
-        self.new_card = None
-        self.am_known = False
-        self.protected = False
-        self.other_protected = False
+        self.player = player
+        self.my_hand = None
         self.win = None
+        self.game = game
 
     def get_hand(self):
         return self.my_hand
+    
+    def discard(self, card):
+        #learning!!!
+        pass
 
-    def draw(card):
-        if(self.new_card != None):
-            return "already holding two cards {} and {}".format(self.my_hand, self.new_card) 
-        self.new_card = card
-
-    def discard():
-        self.discards.append(self.my_hand)
-        return self.my_hand
-
-    def take_turn(self):
-        self.protected = False
-        A = self.possible_actions()
-        a = np.sample(A) #tuple of (card, target, guess)
-        #a = self.heuristic(A)
-        if a[0] == self.my_hand:
-            self.my_hand = self.new_card
-        self.new_card = None
-        self.discards.append(a[0])
-        return a
+    def targeted(self, action):
+        pass
 
     
     
     def possible_actions(self):
-<<<<<<< HEAD
         # Game perform card drawing such that self.my_hand now has 2 cards
         all_actions=[]
         current_hand=self.my_hand        
@@ -135,13 +114,6 @@ class player():
         
         
         
-=======
-        pass
-
-    def heuristic(self, A):
-        #Eventually we can implement the heuristic here
-        return A[0]
->>>>>>> 9239c62cbd3088d3c02e13277af9d802350be12b
 
 
 
