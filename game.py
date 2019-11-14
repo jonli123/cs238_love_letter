@@ -79,7 +79,7 @@ class Game():
         player.draw(self._deck[0])
         self._deck = self._deck[1:]
         game_state = self.getGameState()
-        action = player.take_turn(game_state)
+        action = player.take_turn(game_state,self._players)
         self.discard_card(action.card)
         self.do_action(player,action)
         self._turn_index += 1
