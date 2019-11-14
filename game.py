@@ -14,14 +14,14 @@ class Game():
         self._discards = []
 
 
-    def discard_card(card):
+    def discard_card(self,card):
         self._discards.append(card)
 
 
-    def do_action(player,action):
+    def do_action(self,player,action):
         if action.card == Card.guard:
             #guess card
-            if self._players[action.player_target].hand_card == action.guess and not self._players[action.player_target].protected:
+            if self._players[action.player_target].my_hand == action.guess and not self._players[action.player_target].protected:
                 self._players[action.player_target].discard()
                 self._winner = player.player
                 self._game_active = False
@@ -29,19 +29,19 @@ class Game():
         elif action.card == Card.priest:
             #see other hand
             if not self._players[action.player_target].protected:
-                player.information = self._players[action.player_target].hand_card
+                player.information = self._players[action.player_target].my_hand
 
         elif action.card == Card.baron:
-            #compare hands and eliminate
+            #compare hands and eliminateac
             if not self._players[action.player_target].protected:
-                if self._players[action.player_target].hand_card > player.hand_card:
+                if self._players[action.player_target].my_hand > player.my_hand:
                     self._winner = player.player
                     self._game_active = False
-                elif self._players[action.player_target].hand_card < player.hand_card:
+                elif self._players[action.player_target].my_hand < player.my_hand:
                     self._winner = action.player_target
                     self._game_active = False
                 else:
-                    player.information = self._players[action.player_target].hand_card
+                    player.information = self._players[action.player_target].my_hand
 
         elif action.card == Card.handmaid:
             #protect self
@@ -55,9 +55,9 @@ class Game():
         elif action.card == Card.king:
             #Trade hands
             if not self._players[action.player_target].protected:
-                temp = self._players[action.player_target].hand_card
-                self._players[action.player_target].hand_card = player.hand_card
-                player.hand_card = temp
+                temp = self._players[action.player_target].my_hand
+                self._players[action.player_target].my_hand = player.my_hand
+                player.my_hand = temp
         elif action.card == Card.countess:
             #Do nothing
             pass
@@ -69,8 +69,11 @@ class Game():
             raise RuntimeError('action.card with unexpected value: ',action.card)
 
     def getGameState(self):
-        pass
-
+        stateMap = {}
+        stateMap['allSeenCards'] = self._discards
+        stateMap['canTarget'] = [1,1]
+        stateMap['knowledge'] = {}
+        return stateMap
 
     def do_turn(self):
         print("turn ",self._turn_index)
@@ -90,8 +93,8 @@ class Game():
             self.do_turn()
             self._game_active = len(self._deck) > 1
         if self.winner == -1:
-            if self._players[0].hand_card > self._players[1].hand_card:
+            if self._players[0].my_hand > self._players[1].my_hand:
                 self.winner = 0
-            elif self._players[0].hand_card < self._players[1].hand_card:
+            elif self._players[0].my_hand < self._players[1].my_hand:
                 self.winner = 1
         return self._winner
