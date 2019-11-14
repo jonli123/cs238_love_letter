@@ -19,6 +19,10 @@ class Game():
 
 
     def do_action(self,player,action):
+        if action.player_target is None:
+            #All actions just discard, no targets available
+            return
+            
         if action.card == Card.guard:
             #guess card
             if self._players[action.player_target].my_hand == action.guess and not self._players[action.player_target].protected:
@@ -59,7 +63,7 @@ class Game():
                 player.my_hand = temp
         elif action.card == Card.countess:
             #Do nothing
-            pass
+            return
         elif action.card == Card.princess:
             #Lose Game
             self._winner = (player.player + 1) % 2

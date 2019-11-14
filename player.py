@@ -54,10 +54,11 @@ class Player():
     def take_turn(self,game_state,players):
         self.protected = False
         A = self.possible_actions(game_state,players)
+        if not A:
+            for card in self.get_hand():
+                A.append(PlayerAction(card,None,Card.noCard))
         a = random.choice(A) #tuple of (card, target, guess)
-        #print(idx)
-        #a = A[idx]
-        print(a)
+        #print(a)
         self.discard(a.card)
         return a
 
@@ -65,7 +66,7 @@ class Player():
         # Game perform card drawing such that self.my_hand now has 2 cards
         all_actions=[]
         current_hand=self.get_hand()
-        print("current_hand ",current_hand)
+        #print("current_hand ",current_hand)
         # might want to make a method to return all players instead of direcly accessing it
         opponents=list(set(players) - set([players[self.player]]))
         # find possible cards to guess given the known state
