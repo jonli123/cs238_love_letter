@@ -1,6 +1,10 @@
 import numpy as np
 from card import Card
+<<<<<<< HEAD
 from player import Player, PlayerAction
+=======
+from player import Player
+>>>>>>> e9e591490cbe0094e2a9d12092916754a04d349c
 
 class Game():
     """A Love Letter Game"""
@@ -66,6 +70,7 @@ class Game():
             self._winner = (player.player + 1) % 2
             self._game_active = False
         else:
+<<<<<<< HEAD
             raise RuntimeError('action.card with unexpected value: ',action.card)
 
     def getGameState(self):
@@ -80,6 +85,17 @@ class Game():
         self._deck = self._deck[1:]
         game_state = self.getGameState()
         action = player.take_turn(game_state,self._players)
+=======
+            throw("error")
+
+
+    def do_turn(self):
+        player = players[self._turn_index % 2]
+        player.protected = False
+        player.draw(deck[0])
+        deck = deck[1:]
+        action = player.discard()
+>>>>>>> e9e591490cbe0094e2a9d12092916754a04d349c
         self.discard_card(action.card)
         self.do_action(player,action)
         self._turn_index += 1
