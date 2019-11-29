@@ -22,7 +22,7 @@ class Game():
         if action.player_target is None:
             #All actions just discard, no targets available
             return
-            
+
         if action.card == Card.guard:
             #guess card
             if self._players[action.player_target].my_hand == action.guess and not self._players[action.player_target].protected:
@@ -72,6 +72,7 @@ class Game():
             raise RuntimeError('action.card with unexpected value: ',action.card)
 
     def getGameState(self):
+        #TODO: Finish state implementation
         stateMap = {}
         stateMap['allSeenCards'] = self._discards
         stateMap['canTarget'] = [1,1]
