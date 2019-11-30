@@ -7,8 +7,8 @@ numSimulations = 100
 for i in range(numSimulations):
     deck = Card.shuffle_deck()
 
-    player0 = Player(0,deck[0])
-    player1 = Player(1,deck[1])
+    player0 = Player(0,deck[0],2)
+    player1 = Player(1,deck[1],2)
     deck = deck[2:]
     players = [player0,player1]
 

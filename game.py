@@ -11,11 +11,16 @@ class Game():
         self._turn_index = 0
         self._game_active = True
         self._winner = -1
-        self._discards = []
+
+        #public knowledge
+        self._discards = {}
+        self._targetable = [1 for player in players]
 
 
     def discard_card(self,card):
-        self._discards.append(card)
+        if card not in self._discards:
+            self._discards[card] = 0
+        self._discards[card]+=1
 
 
     def do_action(self,player,action):
@@ -25,20 +30,20 @@ class Game():
 
         if action.card == Card.guard:
             #guess card
-            if self._players[action.player_target].my_hand == action.guess and not self._players[action.player_target].protected:
-                self._winner = player.player
+            if self._players[action.player_target].my_hand == action.guess and self._targetable[action.player_target]:
+                self._winner = player.id
                 self._game_active = False
 
         elif action.card == Card.priest:
             #see other hand
-            if not self._players[action.player_target].protected:
+            if self._targetable[action.player_target]:
                 player.information = self._players[action.player_target].my_hand
 
         elif action.card == Card.baron:
             #compare hands and eliminateac
-            if not self._players[action.player_target].protected:
+            if self._targetable[action.player_target]:
                 if self._players[action.player_target].my_hand > player.my_hand:
-                    self._winner = player.player
+                    self._winner = player.id
                     self._game_active = False
                 elif self._players[action.player_target].my_hand < player.my_hand:
                     self._winner = action.player_target
@@ -48,16 +53,16 @@ class Game():
 
         elif action.card == Card.handmaid:
             #protect self
-            player.protected = True
+            self._targetable[player.id] = 0
         elif action.card == Card.prince:
             #Force discard
-            if not self._players[action.player_target].protected:
+            if self._targetable[action.player_target]:
                 self._players[action.player_target].discard()
                 self._players[action.player_target].draw(self._deck[0])
                 self._deck = self._deck[1:]
         elif action.card == Card.king:
             #Trade hands
-            if not self._players[action.player_target].protected:
+            if self._targetable[action.player_target]:
                 temp = self._players[action.player_target].my_hand
                 self._players[action.player_target].my_hand = player.my_hand
                 player.my_hand = temp
@@ -66,7 +71,7 @@ class Game():
             return
         elif action.card == Card.princess:
             #Lose Game
-            self._winner = (player.player + 1) % 2
+            self._winner = (player.id + 1) % 2
             self._game_active = False
         else:
             raise RuntimeError('action.card with unexpected value: ',action.card)
@@ -75,14 +80,12 @@ class Game():
         #TODO: Finish state implementation
         stateMap = {}
         stateMap['allSeenCards'] = self._discards
-        stateMap['canTarget'] = [1,1]
-        stateMap['knowledge'] = {}
+        stateMap['canTarget'] = self._targetable
         return stateMap
 
     def do_turn(self):
-        #print("turn ",self._turn_index)
         player = self._players[self._turn_index % 2]
-        player.protected = False
+        self._targetable[player.id] = 1
         player.draw(self._deck[0])
         self._deck = self._deck[1:]
         game_state = self.getGameState()
@@ -90,6 +93,10 @@ class Game():
         self.discard_card(action.card)
         self.do_action(player,action)
         self._turn_index += 1
+
+    def get_opponents(self,player_id):
+        opponents=list(set(self._players) - set([self._players[player_id]]))
+        return [opponent.id for opponent in opponents]
 
     def simulate(self):
         while self._game_active:
