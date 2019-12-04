@@ -9,10 +9,6 @@ PlayerAction = namedtuple('PlayerAction', 'card player_target guess')
 
 class Player():
     def __init__(self, player, starting_hand, num_players):
-        #self.my_discards = []
-        #self.opponent_discards = []
-        #self.pool_discards = []
-        self.discards = []
         self.id = player
 
         #Private Knowledge
@@ -20,7 +16,6 @@ class Player():
         self.my_hand = starting_hand
         self.new_card = Card.noCard
         self.am_known = False
-        self.win = None
 
     def set_knowledge(self, player_id, card):
         #print("set_knowledge: ", player_id,card)
@@ -65,7 +60,7 @@ class Player():
         return a
 
 
-    def update(self, game_state, action, reward, next_state, next_action):
+    def update(self, game_state, action, reward):
         pass
 
 
