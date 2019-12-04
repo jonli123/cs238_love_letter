@@ -41,6 +41,7 @@ class Game():
             #print('priest',self._targetable,action.player_target,player.id)
             if self._targetable[action.player_target]:
                 player.set_knowledge(action.player_target,self._players[action.player_target].my_hand)
+                self._players[action.player_target].am_known = 1
                 #player.information = self._players[action.player_target].my_hand
 
         elif action.card == Card.baron:
@@ -54,6 +55,7 @@ class Game():
                     self._game_active = False
                 else:
                     player.set_knowledge(action.player_target,self._players[action.player_target].my_hand)
+                    self._players[action.player_target].am_known = 1
                     #player.information = self._players[action.player_target].my_hand
 
         elif action.card == Card.handmaid:

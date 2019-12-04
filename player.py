@@ -65,6 +65,10 @@ class Player():
         return a
 
 
+    def update(self, game_state, action, reward, next_state, next_action):
+        pass
+
+
     def possible_actions(self,game_state,player_ids):
         # Game perform card drawing such that self.my_hand now has 2 cards
         all_actions=[]
