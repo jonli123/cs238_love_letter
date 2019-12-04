@@ -5,7 +5,8 @@ import numpy as np
 import random
 
 class SarsaPlayer(Player):
-    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.7, learning_rate=0.1, gamma=0.5):
+    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.0, learning_rate=0.9, gamma=0.95):
+        super().__init__(player, starting_hand, num_players)
         self.Q = Q
         self.explore_prob = explore_prob
         self.learning_rate = learning_rate
@@ -28,7 +29,7 @@ class SarsaPlayer(Player):
             else:
                 max_a = []
                 max_a_value = -1000
-                s = self.get_state(game_state, player_ids)
+                s = self.get_state(game_state)
                 for ap in A:
                     val = self.Q[(s, ap)]
                     if val > max_a_value:
@@ -39,10 +40,10 @@ class SarsaPlayer(Player):
         #print(a)
         self.discard(a.card)
         return a
-    
+
     def get_state(self, game_state):
         state = self.knowledge + self.get_hand() + [self.am_known] + game_state['allSeenCards'] + game_state['canTarget']
-        print(state)
+        #print(state)
         return tuple(state)
 
     def get_Q(self):
@@ -62,8 +63,8 @@ class SarsaPlayer(Player):
         s = self.previous_state
         a = self.previous_action
         s_prime = self.get_state(game_state)
-        if win: 
+        if win:
             r = 10
-        else: 
+        else:
             r = -10
         self.Q[(s, a)] = self.Q[(s, a)] + self.learning_rate * (r - self.Q[(s, a)])

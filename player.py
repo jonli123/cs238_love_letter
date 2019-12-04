@@ -35,7 +35,6 @@ class Player():
 
     def discard(self,card=None):
         if card == None:
-            self.discards.append(self.my_hand)
             self.my_hand = Card.noCard
             self.new_card = Card.noCard
             return
@@ -47,7 +46,6 @@ class Player():
             self.new_card = Card.noCard
         else:
             raise RuntimeError("discard error, cards {} and {} dont match {}".format(self.my_hand, self.new_card, card))
-        self.discards.append(card)
 
 
     def take_turn(self,game_state,player_ids):
@@ -60,9 +58,11 @@ class Player():
         return a
 
 
-    def update(self, game_state, action, reward):
+    def update(self, game_state, action):
         pass
 
+    def end_game(self, game_state, win):
+        pass
 
     def possible_actions(self,game_state,player_ids):
         # Game perform card drawing such that self.my_hand now has 2 cards

@@ -100,6 +100,7 @@ class Game():
         #print("turn ",self._turn_index,player.id,self._targetable)
         #print("hands: ", [player.my_hand for player in self._players])
         action = player.take_turn(game_state,player_ids)
+        player.update(game_state,action)
         #print(action)
         self.discard_card(action.card)
         self.do_action(player,action)
@@ -121,4 +122,12 @@ class Game():
                 self._winner = 0
             elif self._players[0].my_hand < self._players[1].my_hand:
                 self._winner = 1
+
+        game_state = self.getGameState()
+        if self._winner == 1:
+            self._players[1].end_game(game_state, 1)
+            self._players[0].end_game(game_state, 0)
+        elif self._winner == 0:
+            self._players[0].end_game(game_state, 1)
+            self._players[1].end_game(game_state, 0)
         return self._winner
