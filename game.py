@@ -14,13 +14,11 @@ class Game():
         self._num_players = len(players)
 
         #public knowledge
-        self._discards = {}
+        self._discards = [0]*9
         self._targetable = [1 for player in players]
 
 
     def discard_card(self,card):
-        if card not in self._discards:
-            self._discards[card] = 0
         self._discards[card]+=1
 
 
