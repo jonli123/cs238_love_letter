@@ -43,7 +43,7 @@ class SarsaPlayer(Player):
 
     def get_state(self, game_state):
         state = self.knowledge + self.get_hand() + [self.am_known] + game_state['allSeenCards'] + game_state['canTarget']
-        #print(state)
+        print(state)
         return tuple(state)
 
     def get_Q(self):

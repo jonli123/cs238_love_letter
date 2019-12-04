@@ -9,12 +9,12 @@ import pickle
 import os.path
 
 numWinner = 0
-numSimulations = int(1e5)
+numSimulations = int(10)
 p1_wins = p0_wins = 0
 
 Q = defaultdict(int)
 
-filename = 'Q.pkl'
+filename = ''
 try:
     if os.path.exists(filename):
         with open(filename, 'rb') as f:
@@ -53,7 +53,8 @@ for i in range(numSimulations):
 print("Num times player 0 won: ",p0_wins)
 print("Num times player 1 won: ",p1_wins)
 
-
+'''
 plt.hist(Q.values())
 plt.yscale('log')
 plt.show()
+'''
