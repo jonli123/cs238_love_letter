@@ -15,7 +15,7 @@ class Player():
         self.knowledge = [Card.noCard for player in range(num_players)]
         self.my_hand = starting_hand
         self.new_card = Card.noCard
-        self.am_known = False
+        self.am_known = 0
 
     def set_knowledge(self, player_id, card):
         #print("set_knowledge: ", player_id,card)
