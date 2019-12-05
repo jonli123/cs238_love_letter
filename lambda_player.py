@@ -65,7 +65,6 @@ class LambdaPlayer(Player):
             if self.knowledge[opponent] not in (Card.guard, 0):
                 self.discard(Card.guard)
                 return PlayerAction(Card.guard, opponent, self.knowledge[opponent])
-            
             other = list(filter(lambda c: c != Card.guard, hand))
             if len(other) == 0 or other[0] in {Card.king, Card.baron}:
                 return self.play_guard(distr)
@@ -84,6 +83,10 @@ class LambdaPlayer(Player):
                 return self.play_prince()
             self.discard(other)
             return PlayerAction(other, None, Card.noCard)
+
+        #if I can make them discard an 8
+        if Card.prince in hand and self.knowledge[opponent] == 8:
+            self.discard(Card.prince)
 
         #if I have a 3
         if Card.baron in hand:

@@ -3,13 +3,14 @@ from card import Card
 from player import Player
 from heuristic_player import HeuristicPlayer
 from sarsa_player import SarsaPlayer
+from lambda_player import LambdaPlayer
 from collections import defaultdict
 import matplotlib.pyplot as plt
 import pickle
 import os.path
 
 numWinner = 0
-numSimulations = int(10)
+numSimulations = int(1e4)
 p1_wins = p0_wins = 0
 
 Q = defaultdict(int)
@@ -31,8 +32,11 @@ for i in range(numSimulations):
     deck = Card.shuffle_deck()
 
     player0 = Player(0,deck[0],2)
+    #to decrease lambda space set all the bs to the same and set p6 to 1
+    lambdas={'g2':.5, 'g4':.6, 'g5':.3, 'g7':.3, 'b2':.5, 'b4':.5, 'b5':.5, 'b6':.5, 'b7':.5, 'p2':.25, 'p6':.9}
+    player1 = LambdaPlayer(1, deck[0],2, lambdas)
     #player1 = HeuristicPlayer(1,deck[1],2)
-    player1 = SarsaPlayer(1,deck[1],2, Q)
+    #player1 = SarsaPlayer(1,deck[1],2, Q)
     deck = deck[2:]
     players = [player0,player1]
 
