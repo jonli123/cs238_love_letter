@@ -43,7 +43,7 @@ for i in range(numSimulations):
     #player1 = LambdaPlayer(1, deck[0],2, lambdas)
     #player1 = HeuristicPlayer(1,deck[1],2)
     her = i > 1e4
-    player1 = SarsaPlayer(1,deck[1],2, Q, her)
+    player1 = SarsaPlayer(1,deck[1],2, Q, her=her)
     deck = deck[2:]
     players = [player0,player1]
 
