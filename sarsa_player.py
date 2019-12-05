@@ -7,12 +7,13 @@ from heuristic_player import HeuristicPlayer
 from lambda_player import LambdaPlayer
 
 class SarsaPlayer(Player):
-    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.0, learning_rate=0.9, gamma=0.95):
+    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.0, learning_rate=0.9, gamma=0.95, her=False):
         super().__init__(player, starting_hand, num_players)
         self.Q = Q
         self.explore_prob = explore_prob
         self.learning_rate = learning_rate
         self.gamma = gamma
+        self.her = her
         self.previous_state = ()
         self.previous_action = ()
 
@@ -64,7 +65,7 @@ class SarsaPlayer(Player):
             #print('heuristic else:',player_ids)
             if random.random() < self.explore_prob:
                 a = random.choice(A)
-            elif self.huer:
+            elif self.her:
                 a = self.heuristic(A,game_state,player_ids)
             else:
                 max_a = []
