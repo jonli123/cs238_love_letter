@@ -7,13 +7,14 @@ from heuristic_player import HeuristicPlayer
 from lambda_player import LambdaPlayer
 
 class SarsaPlayer(Player):
-    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.0, learning_rate=0.9, gamma=0.95, her=False):
+    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.0, learning_rate=0.9, gamma=0.95, her=False, lam=False):
         super().__init__(player, starting_hand, num_players)
         self.Q = Q
         self.explore_prob = explore_prob
         self.learning_rate = learning_rate
         self.gamma = gamma
         self.her = her
+        self.lam = lam
         self.previous_state = ()
         self.previous_action = ()
 
@@ -56,6 +57,16 @@ class SarsaPlayer(Player):
         return a
     
     def take_turn(self,game_state,player_ids):
+        explore = random.random() < self.explore_prob
+        if self.lam and not explore:
+            lam_player = LambdaPlayer(self.id, self.my_hand, len(self.knowledge))
+            lam_player.knowledge = self.knowledge
+            lam_player.am_known = self.am_known
+            lam_player.new_card = self.new_card
+            a = lam_player.take_turn(game_state, player_ids)
+            self.discard(a.card)
+            return a
+
         A = self.possible_actions(game_state,player_ids)
         if not A:
             for card in self.get_hand():
@@ -63,7 +74,7 @@ class SarsaPlayer(Player):
             a = random.choice(A) #tuple of (card, target, guess)
         else:
             #print('heuristic else:',player_ids)
-            if random.random() < self.explore_prob:
+            if explore:
                 a = random.choice(A)
             elif self.her:
                 a = self.heuristic(A,game_state,player_ids)

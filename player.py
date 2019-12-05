@@ -51,8 +51,6 @@ class Player():
             self.new_card = Card.noCard
         elif card == self.new_card:
             self.new_card = Card.noCard
-        elif self.new_card != Card.noCard:
-            raise RuntimeError("Drew and card thats not a card")
         else:
             raise RuntimeError("discard error, cards {} and {} dont match {}".format(self.my_hand, self.new_card, card))
             

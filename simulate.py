@@ -10,11 +10,11 @@ import pickle
 import os.path
 import random
 
-#random.seed(0) 
 
 numWinner = 0
-numSimulations = int(1e6)
-p1_wins = p0_wins = 0
+numSimulations = int(1.1e5)
+train_wins = [0, 0]
+q_wins = [0, 0]
 
 Q = defaultdict(int)
 
@@ -32,29 +32,37 @@ except:
 
 # training
 for i in range(numSimulations):
-    if i%1000 == 0:
+    if i%10000 == 0:
         print(i)
 
     deck = Card.shuffle_deck()
 
     player0 = Player(0,deck[0],2)
     #to decrease lambda space set all the bs to the same and set p6 to 1
-    lambdas={'g2': 0.79, 'g4': 0.85, 'g5': 0.53, 'g7': 0.46, 'b2': 0.77, 'b4': 0.54, 'b5': 0.67, 'b6': 0.34, 'b7': 0.45, 'p2': 0.52, 'p6': 0.54}
-    #player1 = LambdaPlayer(1, deck[0],2, lambdas)
+    #lambdas={'g2': 0.55, 'g4': 0.46, 'g5': 0.33, 'g7': 0.65, 'b2': 0.77, 'b4': 0.63, 'b5': 0.44, 'b6': 0.33, 'b7': 0.65, 'p2': 0.34, 'p6': 0.39}
+    #player0 = LambdaPlayer(0, deck[0],2, lambdas)
     #player1 = HeuristicPlayer(1,deck[1],2)
-    her = i > 1e4
-    player1 = SarsaPlayer(1,deck[1],2, Q, her=her)
-    deck = deck[2:]
-    players = [player0,player1]
+    #her = i > 1e4
+    if i < 1e5:
+        player1 = SarsaPlayer(1,deck[1],2, Q, explore_prob=0.7, lam=True)
+        deck = deck[2:]
+        players = [player0,player1]
 
-    example_game = Game(deck,players)
-    result = example_game.simulate()
-    if result == 1:
-        p1_wins += 1
-    elif result == 0:
-        p0_wins += 1
+        game = Game(deck,players)
+        result = game.simulate()
+        train_wins[result] += 1
 
-    Q = player1.get_Q()
+        Q = player1.get_Q()
+    else:
+        player1 = SarsaPlayer(1,deck[1],2, Q, explore_prob=0)
+        deck = deck[2:]
+        players = [player0,player1]
+
+        game = Game(deck,players)
+        result = game.simulate()
+        q_wins[result] += 1
+
+        Q = player1.get_Q()
     
 # testing
 
@@ -63,11 +71,13 @@ for i in range(numSimulations):
 #with open('Q.pkl', 'wb') as f:
 #    pickle.dump(Q, f)
 
-print("Num times player 0 won: ",p0_wins)
-print("Num times player 1 won: ",p1_wins)
+print("Num times player 0 won during training: ",train_wins[0])
+print("Num times player 1 won during training: ",train_wins[1])
+print()
+print("Num times player 0 won after: ",q_wins[0])
+print("Num times player 1 won after: ",q_wins[1])
 
-'''
 plt.hist(Q.values())
 plt.yscale('log')
 plt.show()
-'''
+
