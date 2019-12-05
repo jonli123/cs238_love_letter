@@ -1,34 +1,35 @@
 from game import Game
-from card import Card
 from lambda_player import LambdaPlayer
 import copy
 from random import random
 import numpy as np
 
 numGenerations = 10
-#to use tournament make generation_size and keep_elite powers of 2
-generation_size = 64
-keep_elite = 8 
+generation_size = 128
+keep_elite = generation_size//8
 lambda_names=['g2', 'g4', 'g5', 'g7', 'b2', 'b4', 'b5', 'b6', 'b7', 'p2', 'p6']
 games_per_round = 100
 
-mutation = 0.1
+mutation = 0.8
+random_children = generation_size//8
 
-def make_generation(elite):
+def make_generation(elite):    
     new_gen = copy.copy(elite)
+    rand_kids = [[random() for i in range(len(lambda_names))] for i in range(random_children)]
+    new_gen = new_gen + rand_kids
     while(len(new_gen) < generation_size):
         np.random.shuffle(elite)
         for i in range(0, len(elite)-1, 2):
             pairents = list(zip(elite[i], elite[i+1]))
-        
+
             mix = [np.random.choice(pair) for pair in pairents]
             if random() < mutation:
                 mix[np.random.randint(0,len(mix))] = random()
             new_gen.append(mix)
-        
+
             avg = [np.average(pair) for pair in pairents]
             if random() < mutation:
-                avg[np.random.randint(0,len(mix))] = random()
+               avg[np.random.randint(0,len(mix))] = random()
             new_gen.append(avg)
     return new_gen
 
