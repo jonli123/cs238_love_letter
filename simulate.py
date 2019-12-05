@@ -39,7 +39,7 @@ for i in range(numSimulations):
 
     player0 = Player(0,deck[0],2)
     #to decrease lambda space set all the bs to the same and set p6 to 1
-    lambdas={'g2':.5, 'g4':.6, 'g5':.3, 'g7':.3, 'b2':.5, 'b4':.5, 'b5':.5, 'b6':.5, 'b7':.5, 'p2':.25, 'p6':.9}
+    lambdas={'g2': 0.79, 'g4': 0.85, 'g5': 0.53, 'g7': 0.46, 'b2': 0.77, 'b4': 0.54, 'b5': 0.67, 'b6': 0.34, 'b7': 0.45, 'p2': 0.52, 'p6': 0.54}
     #player1 = LambdaPlayer(1, deck[0],2, lambdas)
     #player1 = HeuristicPlayer(1,deck[1],2)
     player1 = SarsaPlayer(1,deck[1],2, Q)

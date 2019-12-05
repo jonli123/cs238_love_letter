@@ -9,7 +9,7 @@ import copy
 #let's implement this for just two players
 class LambdaPlayer(Player):
     def __init__(self, player, starting_hand, num_players, \
-        lambdas={'g2':.5, 'g4':.6, 'g5':.3, 'g7':.3, 'b2':.5, 'b4':.5, 'b5':.5, 'b6':.5, 'b7':.5, 'p2':.25, 'p6':.9}):
+        lambdas={'g2': 0.79, 'g4': 0.85, 'g5': 0.53, 'g7': 0.46, 'b2': 0.77, 'b4': 0.54, 'b5': 0.67, 'b6': 0.34, 'b7': 0.45, 'p2': 0.52, 'p6': 0.54}):
         self.id = player
 
         #Private Knowledge
