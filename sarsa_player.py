@@ -4,7 +4,7 @@ from collections import namedtuple
 import numpy as np
 import random
 from heuristic_player import HeuristicPlayer 
-random.seed(0) 
+#random.seed(0) 
 class SarsaPlayer(Player):
     def __init__(self, player, starting_hand, num_players, Q, current_round=0, explore_prob=0.0, learning_rate=0.9, gamma=0.95):
         super().__init__(player, starting_hand, num_players)
@@ -55,7 +55,7 @@ class SarsaPlayer(Player):
         return a
     
     def take_turn(self,game_state,player_ids):
-        print("sarsa")
+        #print("sarsa")
         heuristic_simulation=1e3
         
         # use heuristic action in the beginning

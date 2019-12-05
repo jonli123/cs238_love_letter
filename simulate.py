@@ -10,10 +10,10 @@ import pickle
 import os.path
 import random
 
-random.seed(0) 
+#random.seed(0) 
 
 numWinner = 0
-numSimulations = int(5)
+numSimulations = int(1e6)
 p1_wins = p0_wins = 0
 
 Q = defaultdict(int)
