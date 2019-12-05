@@ -3,7 +3,7 @@ from card import Card # map of total count
 from collections import namedtuple
 import numpy as np
 import random
-random.seed(0) 
+
 PlayerAction = namedtuple('PlayerAction', 'card player_target guess')
 
 
@@ -25,8 +25,6 @@ class Player():
         return [self.my_hand, self.new_card]
 
     def draw(self,card):
-        #print('drawn card')
-        #print(card)
         if card == Card.noCard:
             raise RuntimeError("need to draw the actual card")
         if self.new_card != Card.noCard:
@@ -53,11 +51,18 @@ class Player():
             self.new_card = Card.noCard
         elif card == self.new_card:
             self.new_card = Card.noCard
+        elif self.new_card != Card.noCard:
+            raise RuntimeError("Drew and card thats not a card")
         else:
             raise RuntimeError("discard error, cards {} and {} dont match {}".format(self.my_hand, self.new_card, card))
+            
+        #print("new card")
+        #print(self.new_card)
+        #print("***")
 
 
     def take_turn(self,game_state,player_ids):
+        #print("random")
         A = self.possible_actions(game_state,player_ids)
         if not A:
             for card in self.get_hand():

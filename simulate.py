@@ -10,10 +10,10 @@ import pickle
 import os.path
 import random
 
-random.seed(0) 
+#random.seed(0) 
 
 numWinner = 0
-numSimulations = int(2)
+numSimulations = int(1e6)
 p1_wins = p0_wins = 0
 
 Q = defaultdict(int)
@@ -42,7 +42,7 @@ for i in range(numSimulations):
     lambdas={'g2': 0.79, 'g4': 0.85, 'g5': 0.53, 'g7': 0.46, 'b2': 0.77, 'b4': 0.54, 'b5': 0.67, 'b6': 0.34, 'b7': 0.45, 'p2': 0.52, 'p6': 0.54}
     #player1 = LambdaPlayer(1, deck[0],2, lambdas)
     #player1 = HeuristicPlayer(1,deck[1],2)
-    player1 = SarsaPlayer(1,deck[1],2, Q)
+    player1 = SarsaPlayer(1,deck[1],2, Q, i)
     deck = deck[2:]
     players = [player0,player1]
 
