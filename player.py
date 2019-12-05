@@ -57,6 +57,8 @@ class Player():
         self.discard(a.card)
         return a
 
+    def get_Q(self):
+        pass
 
     def update(self, game_state, action):
         pass

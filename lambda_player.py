@@ -72,7 +72,7 @@ class LambdaPlayer(Player):
             other = other[0]
             key = 'g{}'.format(other)
             lambd = self.lambdas[key]
-            if max(distr[1:]) > lambd:
+            if not self.knowledge[opponent] == Card.guard or max(distr[1:]) > lambd:
                 return self.play_guard(distr)
             elif other == Card.priest:
                 self.discard(Card.priest)
@@ -92,9 +92,13 @@ class LambdaPlayer(Player):
                 self.discard(Card.baron)
                 return PlayerAction(Card.baron, opponent, Card.noCard)
             other = other[0]
+            if self.knowledge[opponent] != 0:
+                if self.knowledge[opponent] < other:
+                    self.discard(Card.baron)
+                    return PlayerAction(Card.guard, opponent, Card.noCard)
             key = 'b{}'.format(other)
             lambd = self.lambdas[key]
-            if sum(distr[:other - 1]) > lambd:
+            if self.knowledge[opponent] == 0 and sum(distr[:other - 1]) > lambd:
                 self.discard(Card.baron)
                 return PlayerAction(Card.baron, opponent, Card.noCard)
             elif other == Card.priest:
@@ -107,7 +111,11 @@ class LambdaPlayer(Player):
                 return self.play_prince()
             self.discard(other)
             return PlayerAction(other, None, Card.noCard)
-    
+        
+        if hand[0] == 2 and hand[1] == 2:
+            self.discard(2)
+            return PlayerAction(2, opponent, 0)
+
         #I have a prince
         if self.am_known:
             return self.play_prince()
@@ -119,7 +127,7 @@ class LambdaPlayer(Player):
         lambd = self.lambdas[key]
         if random.random() < lambd:
             return self.play_prince()
-        discard(other)
+        self.discard(other)
         if other == Card.priest:
             return PlayerAction(Card.priest, opponent, Card.noCard)
         return PlayerAction(other, None, Card.noCard)
@@ -144,7 +152,6 @@ class LambdaPlayer(Player):
         seen = copy.copy(game_state['allSeenCards'])
         for c in hand:
             seen[c - 1] += 1
-        print(seen)
         avail = [0 for i in range(len(Card.counts))]
         for i in range(len(Card.counts)):
             avail[i] = Card.counts[i] - seen[i]
