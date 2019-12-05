@@ -93,7 +93,7 @@ class Game():
     def do_turn(self):
         player = self._players[self._turn_index % self._num_players]
         self._targetable[player.id] = 1
-        print(self._deck)
+        #print(self._deck)
         player.draw(self._deck[0])
         self._deck = self._deck[1:]
         game_state = self.getGameState()

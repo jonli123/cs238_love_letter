@@ -30,6 +30,8 @@ class Player():
     def draw(self,card):
         print('drawn card')
         print(card)
+        print('my hand')
+        print(self.my_hand)
         if card == Card.noCard:
             raise RuntimeError("need to draw the actual card")
         if self.new_card != Card.noCard:
@@ -41,11 +43,11 @@ class Player():
 
 
     def discard(self,card=None):
-        print('card')
-        print(self.my_hand)
-        print(self.new_card)
-        print(card)
-        print('***')
+        #print('card')
+        #print(self.my_hand)
+        #print(self.new_card)
+        #print(card)
+        #print('***')
         if card == None:
             self.my_hand = Card.noCard
             self.new_card = Card.noCard
@@ -56,8 +58,14 @@ class Player():
             self.new_card = Card.noCard
         elif card == self.new_card:
             self.new_card = Card.noCard
+        elif self.new_card != Card.noCard:
+            raise RuntimeError("wrong")
         else:
             raise RuntimeError("discard error, cards {} and {} dont match {}".format(self.my_hand, self.new_card, card))
+            
+        print("new card")
+        print(self.new_card)
+        print("***")
 
 
     def take_turn(self,game_state,player_ids):

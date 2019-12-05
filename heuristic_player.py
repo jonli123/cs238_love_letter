@@ -56,6 +56,4 @@ class HeuristicPlayer(Player):
                 A_safe.append(PlayerAction(card,None,Card.noCard))
         a = random.choice(A_safe)
         #print(a)
-        if a==0:
-            1
         return a

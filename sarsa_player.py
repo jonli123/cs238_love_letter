@@ -6,7 +6,7 @@ import random
 from heuristic_player import HeuristicPlayer 
 random.seed(0) 
 class SarsaPlayer(Player):
-    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.0, learning_rate=0.9, gamma=0.95, current_round=0):
+    def __init__(self, player, starting_hand, num_players, Q, current_round=0, explore_prob=0.0, learning_rate=0.9, gamma=0.95):
         super().__init__(player, starting_hand, num_players)
         self.Q = Q
         self.explore_prob = explore_prob
@@ -19,14 +19,46 @@ class SarsaPlayer(Player):
     def take_turn(self,game_state,player_ids):
         heuristic_simulation=1e3
         # use heuristic action in the beginning
+        #print('heuristic take_turn:',player_ids)
+        A = self.possible_actions(game_state,player_ids)
+        
         if self.current_round<heuristic_simulation:
-            player_heuristic = HeuristicPlayer(self.id,self.my_hand,2)
-            a=player_heuristic.take_turn(game_state,player_ids)
+            allSeenCards=game_state['allSeenCards']
+            canTarget=game_state['canTarget']
+            current_hand=self.get_hand()
+            opponent_ids=player_ids.copy()
+            #print("heuristic opp:", opponent_ids)
+            opponent_ids.remove(self.id)
+            #action: card player_target guess
+            #If we know the opponent card and we have a 1, play it and guess the card
+            #If we know the opponent card is less than ours and we have a baron, play it
+            for opponent in opponent_ids:
+                if self.knowledge[opponent] != Card.noCard:
+                    if self.knowledge[opponent] != Card.guard and Card.guard in current_hand:
+                        #print("win")
+                        return PlayerAction(Card.guard,opponent,self.knowledge[opponent])
+                    if current_hand[0] == Card.baron and current_hand[1] > self.knowledge[opponent]:
+                        #print("win")
+                        return PlayerAction(Card.baron,opponent,Card.noCard)
+                    if current_hand[1] == Card.baron and current_hand[0] > self.knowledge[opponent]:
+                        #print("win")
+                        return PlayerAction(Card.baron,opponent,Card.noCard)
+            #If we have a 4, play the 4
+            if Card.handmaid in current_hand:
+                return PlayerAction(Card.handmaid,self.id,Card.noCard)
+            #If we have a 2, play the 2
+            if Card.priest in current_hand:
+                return PlayerAction(Card.priest,opponent,Card.noCard)
+            #Never play an 8
+            A_safe = [action for action in A if action.card != Card.princess]
+            if not A_safe:
+                for card in self.get_hand():
+                    A_safe.append(PlayerAction(card,None,Card.noCard))
+            a = random.choice(A_safe)
             
         # switch to reinforment learning action  
         else:
-            #print('heuristic take_turn:',player_ids)
-            A = self.possible_actions(game_state,player_ids)
+            
             #print('heuristic after:',player_ids)
             if not A:
                 for card in self.get_hand():
@@ -49,7 +81,6 @@ class SarsaPlayer(Player):
                     a = random.choice(max_a)
                     #print(a)
         self.discard(a.card)
-        self.current_round+=1
         return a
     
 

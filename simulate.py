@@ -13,7 +13,7 @@ import random
 random.seed(0) 
 
 numWinner = 0
-numSimulations = int(2)
+numSimulations = int(5)
 p1_wins = p0_wins = 0
 
 Q = defaultdict(int)
@@ -42,7 +42,7 @@ for i in range(numSimulations):
     lambdas={'g2':.5, 'g4':.6, 'g5':.3, 'g7':.3, 'b2':.5, 'b4':.5, 'b5':.5, 'b6':.5, 'b7':.5, 'p2':.25, 'p6':.9}
     #player1 = LambdaPlayer(1, deck[0],2, lambdas)
     #player1 = HeuristicPlayer(1,deck[1],2)
-    player1 = SarsaPlayer(1,deck[1],2, Q)
+    player1 = SarsaPlayer(1,deck[1],2, Q, i)
     deck = deck[2:]
     players = [player0,player1]
 
