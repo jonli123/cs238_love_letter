@@ -6,6 +6,7 @@ import random
 random.seed(0) 
 class HeuristicPlayer(Player):
     def take_turn(self,game_state,player_ids):
+        print("hauris")
         #print('heuristic take_turn:',player_ids)
         A = self.possible_actions(game_state,player_ids)
         #print('heuristic after:',player_ids)

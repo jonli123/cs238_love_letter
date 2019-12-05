@@ -28,10 +28,10 @@ class Player():
         return [self.my_hand, self.new_card]
 
     def draw(self,card):
-        print('drawn card')
-        print(card)
-        print('my hand')
-        print(self.my_hand)
+        #print('drawn card')
+        #print(card)
+        #print('my hand')
+        #print(self.my_hand)
         if card == Card.noCard:
             raise RuntimeError("need to draw the actual card")
         if self.new_card != Card.noCard:
@@ -63,12 +63,13 @@ class Player():
         else:
             raise RuntimeError("discard error, cards {} and {} dont match {}".format(self.my_hand, self.new_card, card))
             
-        print("new card")
-        print(self.new_card)
-        print("***")
+        #print("new card")
+        #print(self.new_card)
+        #print("***")
 
 
     def take_turn(self,game_state,player_ids):
+        print("random")
         A = self.possible_actions(game_state,player_ids)
         if not A:
             for card in self.get_hand():
