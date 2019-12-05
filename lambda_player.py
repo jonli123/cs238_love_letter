@@ -99,7 +99,7 @@ class LambdaPlayer(Player):
             if self.knowledge[opponent] != 0:
                 if self.knowledge[opponent] < other:
                     self.discard(Card.baron)
-                    return PlayerAction(Card.guard, opponent, Card.noCard)
+                    return PlayerAction(Card.baron, opponent, Card.noCard)
             key = 'b{}'.format(other)
             lambd = self.lambdas[key]
             if self.knowledge[opponent] == 0 and sum(distr[:other - 1]) > lambd:
