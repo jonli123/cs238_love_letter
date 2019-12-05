@@ -3,7 +3,7 @@ from card import Card # map of total count
 from collections import namedtuple
 import numpy as np
 import random
-
+random.seed(0) 
 PlayerAction = namedtuple('PlayerAction', 'card player_target guess')
 
 
@@ -16,6 +16,9 @@ class Player():
         self.my_hand = starting_hand
         self.new_card = Card.noCard
         self.am_known = 0
+        
+    def accessInfo(self):
+        return self.id,
 
     def set_knowledge(self, player_id, card):
         #print("set_knowledge: ", player_id,card)
@@ -25,15 +28,24 @@ class Player():
         return [self.my_hand, self.new_card]
 
     def draw(self,card):
+        print('drawn card')
+        print(card)
+        if card == Card.noCard:
+            raise RuntimeError("need to draw the actual card")
         if self.new_card != Card.noCard:
             raise RuntimeError("already holding two cards {} and {}".format(self.my_hand, self.new_card))
         if self.my_hand == Card.noCard:
             self.my_hand = card
-        else:
+        else: 
             self.new_card = card
 
 
     def discard(self,card=None):
+        print('card')
+        print(self.my_hand)
+        print(self.new_card)
+        print(card)
+        print('***')
         if card == None:
             self.my_hand = Card.noCard
             self.new_card = Card.noCard
@@ -53,6 +65,7 @@ class Player():
         if not A:
             for card in self.get_hand():
                 A.append(PlayerAction(card,None,Card.noCard))
+        random.seed(0) 
         a = random.choice(A) #tuple of (card, target, guess)
         self.discard(a.card)
         return a

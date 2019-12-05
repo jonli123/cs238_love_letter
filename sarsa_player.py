@@ -3,9 +3,10 @@ from card import Card # map of total count
 from collections import namedtuple
 import numpy as np
 import random
-
+from heuristic_player import HeuristicPlayer 
+random.seed(0) 
 class SarsaPlayer(Player):
-    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.0, learning_rate=0.9, gamma=0.95):
+    def __init__(self, player, starting_hand, num_players, Q, explore_prob=0.0, learning_rate=0.9, gamma=0.95, current_round=0):
         super().__init__(player, starting_hand, num_players)
         self.Q = Q
         self.explore_prob = explore_prob
@@ -13,37 +14,48 @@ class SarsaPlayer(Player):
         self.gamma = gamma
         self.previous_state = ()
         self.previous_action = ()
+        self.current_round = 0
 
     def take_turn(self,game_state,player_ids):
-        #print('heuristic take_turn:',player_ids)
-        A = self.possible_actions(game_state,player_ids)
-        #print('heuristic after:',player_ids)
-        if not A:
-            for card in self.get_hand():
-                A.append(PlayerAction(card,None,Card.noCard))
-            a = random.choice(A) #tuple of (card, target, guess)
+        heuristic_simulation=1e3
+        # use heuristic action in the beginning
+        if self.current_round<heuristic_simulation:
+            player_heuristic = HeuristicPlayer(self.id,self.my_hand,2)
+            a=player_heuristic.take_turn(game_state,player_ids)
+            
+        # switch to reinforment learning action  
         else:
-            #print('heuristic else:',player_ids)
-            if random.random() < self.explore_prob:
-                a = random.choice(A)
+            #print('heuristic take_turn:',player_ids)
+            A = self.possible_actions(game_state,player_ids)
+            #print('heuristic after:',player_ids)
+            if not A:
+                for card in self.get_hand():
+                    A.append(PlayerAction(card,None,Card.noCard))
+                a = random.choice(A) #tuple of (card, target, guess)
             else:
-                max_a = []
-                max_a_value = -1000
-                s = self.get_state(game_state)
-                for ap in A:
-                    val = self.Q[(s, ap)]
-                    if val > max_a_value:
-                        max_a = [ap]
-                    elif val == max_a_value:
-                        max_a.append(ap)
-                a = random.choice(max_a)
-        #print(a)
+                #print('heuristic else:',player_ids)
+                if random.random() < self.explore_prob:
+                    a = random.choice(A)
+                else:
+                    max_a = []
+                    max_a_value = -1000
+                    s = self.get_state(game_state)
+                    for ap in A:
+                        val = self.Q[(s, ap)]
+                        if val > max_a_value:
+                            max_a = [ap]
+                        elif val == max_a_value:
+                            max_a.append(ap)
+                    a = random.choice(max_a)
+                    #print(a)
         self.discard(a.card)
+        self.current_round+=1
         return a
+    
 
     def get_state(self, game_state):
         state = self.knowledge + self.get_hand() + [self.am_known] + game_state['allSeenCards'] + game_state['canTarget']
-        print(state)
+        #print(state)
         return tuple(state)
 
     def get_Q(self):

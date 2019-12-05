@@ -5,7 +5,6 @@ Functions and constants to facilitate working with cards, which are represented 
 
 import numpy as np
 
-
 class Card():
     """Static Card class"""
     noCard = 0

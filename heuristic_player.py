@@ -3,7 +3,7 @@ from card import Card # map of total count
 from collections import namedtuple
 import numpy as np
 import random
-
+random.seed(0) 
 class HeuristicPlayer(Player):
     def take_turn(self,game_state,player_ids):
         #print('heuristic take_turn:',player_ids)
@@ -55,4 +55,7 @@ class HeuristicPlayer(Player):
             for card in self.get_hand():
                 A_safe.append(PlayerAction(card,None,Card.noCard))
         a = random.choice(A_safe)
+        #print(a)
+        if a==0:
+            1
         return a
