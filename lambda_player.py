@@ -87,6 +87,7 @@ class LambdaPlayer(Player):
         #if I can make them discard an 8
         if Card.prince in hand and self.knowledge[opponent] == 8:
             self.discard(Card.prince)
+            return PlayerAction(Card.prince, opponent, Card.noCard)
 
         #if I have a 3
         if Card.baron in hand:
@@ -139,9 +140,9 @@ class LambdaPlayer(Player):
         #assumes the other card isn't an 8
         opp = int(not self.id)
         #if I'm known, or I know what they have, discard myself
+        self.discard(Card.prince)
         if (self.am_known and self.new_card == Card.prince) or self.knowledge[opp]:
             return PlayerAction(Card.prince, self.id, Card.noCard)
-        self.discard(Card.prince)
         return PlayerAction(Card.prince, opp, Card.noCard)
 
     def play_guard(self, distr):
